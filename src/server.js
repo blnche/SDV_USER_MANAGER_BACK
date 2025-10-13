@@ -1,15 +1,20 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import dotenv from 'dotenv';
 
 import routes from './routes/index.js'
 
+dotenv.config();
+
 const app = express()
-const port = 3001
+const port = process.env.PORT || 3001;
 
 app.use(express.json())
 app.use('/api', routes)
 
-mongoose.connect('mongodb+srv://peltierblanche:Rnpbxko6PJO4Kk8T@cluster0.0ozwdke.mongodb.net/')
+const MONGO_URI = process.env.MONGO_URI;
+
+mongoose.connect(MONGO_URI)
 .then(() => {
   console.log('Connected to mongodb');
   app.listen(port, () => {
