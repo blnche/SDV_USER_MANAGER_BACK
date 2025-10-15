@@ -1,29 +1,60 @@
 import UserModel from "../databases/models/user.model.js";
+import { CustomError } from "../utils/response.js";
 
 class UserRepository {
 
     async getAll() {
         try {
-            const result = await UserModel.find()
-            return result
+            return await UserModel.find()
         } catch (error) {
-            console.log('Error fetching users', error);
             throw error
         } 
     }
-
-    async findByEmail(email) {
-        return UserModel.findOne({ email });
-    }
     
     async findById(id) {
-        return UserModel.findById(id);
+        try {
+            return await UserModel.findById(id)
+        } catch (error) {
+            throw error
+        }
     }
-    
+
+    async updateUser(user, data) {
+        try {
+            return await UserModel.findByIdAndUpdate(user._id, data, { new: true })
+        } catch (error) {
+            console.log('Error updating user', error);
+            throw error
+        }
+    }
+
     async create(userData) {
-        const user = new UserModel(userData);
-        return user.save();
+        try {            
+            const user = await UserModel.create(userData);
+            return user.save();
+        } catch (error) {            
+            throw error
+        }
+    
     }
-}
+
+    async findByEmail(email) {
+        try {
+            return await UserModel.findOne({ email });
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async delete(id) {
+        try {
+            return await UserModel.findByIdAndDelete(id);
+        } catch (error) {
+            throw error
+        }
+    }
+
+}    
+
 
 export default new UserRepository()

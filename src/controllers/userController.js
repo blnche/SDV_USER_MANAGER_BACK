@@ -1,34 +1,55 @@
 import UserService from "../services/user.service.js";
+import { CustomError, sendCustomError } from "../utils/response.js";
 
 class UserController {
-    constructor(parameters) {
-        
-    }
 
-    async getAll(req, res) {
+    getAll = async (req, res) => {
         try {
             const users = await UserService.getAll()
-            console.log('Controller data: ', users);
+
             res.status(200).send(users)
         } catch (error) {
             sendCustomError(error, res)
         }
     }
       
-    getUserById = (req, res) => {
-        const { id } = req.params;
-        res.json({ id, name: `User ${id}` });
+    getUserById = async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            const user = await UserService.getById(id)
+
+            res.status(200).send(user)
+        } catch (error) {
+            sendCustomError(error, res)
+        }
     };
     
-    updateUser = (req, res) => {
-        const { id } = req.params;
-        const updatedData = req.body;
-        res.json({ id, ...updatedData });
+    updateUser = async (req, res) => {
+        try {
+            const { id } = req.params;
+            const updatedData = req.body;
+
+            if(!updatedData) throw new CustomError(400, 'NO_DATA_TO_UPDATE', 'No data provided to update user.');
+
+            const updatedUser = await UserService.updateUser(id, updatedData);
+
+            res.status(200).send(updatedUser)
+        } catch (error) {
+            sendCustomError(error, res)
+        }
     };
     
-    deleteUser = (req, res) => {           
-        const { id } = req.params;
-        res.json({ message: `User ${id} deleted` });
+    deleteUser = async (req, res) => {    
+        try {
+            const { id } = req.params;
+
+            const user = await UserService.delete(id)
+
+            res.status(200).send()
+        } catch (error) {
+            sendCustomError(error, res)
+        }       
     } 
 
 }
