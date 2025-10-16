@@ -24,7 +24,7 @@ class AuthController {
         }
     }
 
-    async loggedUser(req, res) {        
+    async loggedUser(req, res) {
         try {
             const valid = AuthService.verifyToken(req.headers.authorization.split(" ")[1])
 

@@ -10,6 +10,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/auth', authRoutes);
-router.use('/users', AuthMiddleware, userRoutes);
+router.use('/users', /*AuthMiddleware,*/ userRoutes);
 
 export default router;

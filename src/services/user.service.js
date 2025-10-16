@@ -6,7 +6,7 @@ class UserService {
     async getAll() {
         const users = await UserRepository.getAll()
         
-        if(users.length > 0) throw new CustomError(404, "NO_USERS_FOUND", 'No users found in the database.')
+        if(users.length < 0) throw new CustomError(404, "NO_USERS_FOUND", 'No users found in the database.')
         return users
     }
     
